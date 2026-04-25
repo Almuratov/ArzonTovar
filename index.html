@@ -2,126 +2,623 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>Tovar joylash</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Admin panel - Mahsulot yuklash</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial Black;
-            font-weight: bold;
-            background: #f5f5f5;
-            padding: 20px;
+            background: #f0f2f5;
+            font-family: 'Arial Black', 'Arial', 'Helvetica Neue', sans-serif;
+            font-weight: 900;
+            padding: 30px 20px;
         }
 
-        .box {
+        .admin-card {
+            max-width: 680px;
+            margin: 0 auto;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 500px;
-            margin: auto;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.15);
+            overflow: hidden;
+            padding: 25px 24px 35px;
         }
 
+        h1 {
+            font-size: 26px;
+            color: #1e2a3e;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .sub {
+            text-align: center;
+            font-size: 13px;
+            font-family: 'Arial', sans-serif;
+            font-weight: normal;
+            color: #4b5563;
+            margin-bottom: 28px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 16px;
+        }
+
+        .image-zone {
+            background: #f9fafb;
+            border-radius: 28px;
+            padding: 18px;
+            margin-bottom: 28px;
+            border: 1px dashed #cbd5e1;
+        }
+
+        .image-label {
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: block;
+            color: #0f172a;
+        }
+
+        .thumb-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .img-preview {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            background: #eef2ff;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border: 1px solid #d1d5db;
+        }
+        .img-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .img-preview .remove-img {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .upload-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .btn {
+            font-family: 'Arial Black', sans-serif;
+            font-weight: 900;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 60px;
+            background: #1e293b;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-light {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+        .btn-light:hover { background: #cbd5e1; }
+
+        .field-group {
+            margin-bottom: 20px;
+        }
+        .field-group label {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
         input, textarea {
             width: 100%;
-            margin-bottom: 10px;
-            padding: 10px;
-            font-weight: bold;
+            padding: 14px 18px;
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 24px;
+            outline: none;
+            background: #ffffff;
+            font-weight: 500;
         }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: green;
-            color: white;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
+        input:focus, textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 85px;
         }
 
         hr {
-            border: 2px solid black;
+            margin: 25px 0 20px;
+            border: none;
+            border-top: 3px dashed #cbd5e1;
+        }
+
+        .contact-info {
+            background: #f8fafc;
+            border-radius: 30px;
+            padding: 16px 20px;
+            margin-top: 12px;
+        }
+        .contact-line {
+            font-family: 'Arial Black', sans-serif;
+            font-weight: 900;
+            font-size: 18px;
+            margin: 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #1e293b;
+        }
+        .contact-line i {
+            width: 32px;
+            font-size: 22px;
+            color: #3b82f6;
+        }
+        .send-btn {
+            width: 100%;
+            background: #10b981;
+            margin-top: 25px;
+            padding: 16px;
+            font-size: 20px;
+            border-radius: 60px;
+            box-shadow: 0 8px 18px rgba(16,185,129,0.3);
+        }
+        .send-btn:hover {
+            background: #059669;
+        }
+
+        .status-msg {
+            margin-top: 20px;
+            background: #eef2ff;
+            padding: 14px;
+            border-radius: 40px;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+            color: #075985;
+        }
+        .note {
+            font-size: 12px;
+            font-family: Arial;
+            font-weight: normal;
+            color: #475569;
+            margin-top: 6px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #64748b;
+            font-family: monospace;
+        }
+        button:active { transform: scale(0.96);}
+        .preview-card {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f1f5f9;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+        }
+        .preview-card h4 {
+            margin-bottom: 12px;
+            color: #1e293b;
+        }
+        .sample-message {
+            font-family: monospace;
+            font-size: 13px;
+            background: white;
+            padding: 12px;
+            border-radius: 16px;
+            white-space: pre-line;
         }
     </style>
 </head>
 <body>
 
-<div class="box">
+<div class="admin-card">
+    <h1>📦 MAHSULOT YUKLASH</h1>
+    <div class="sub">Rasmlar, nom, tavsif, narx — Telegram guruhga jo‘natiladi</div>
 
-    <h2>TOVAR QO‘SHISH</h2>
+    <div class="field-group">
+        <label><i class="fas fa-fire"></i> Nomi</label>
+        <input type="text" id="productName" placeholder="Masalan: Atir, Telefon, Sumka...">
+    </div>
 
-    <!-- Rasm -->
-    <input type="file" id="image" accept="image/*" multiple>
+    <div class="image-zone">
+        <div class="image-label"><i class="fas fa-images"></i> Rasm (1-3 tagacha)</div>
+        <div class="thumb-grid" id="previewContainer"></div>
+        <div class="upload-buttons">
+            <button type="button" class="btn btn-light" id="uploadBtn"><i class="fas fa-upload"></i> Yuklash</button>
+            <button type="button" class="btn btn-light" id="fetchImageBtn"><i class="fas fa-globe"></i> Saytdan o‘zidan rasm</button>
+            <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" multiple style="display: none;">
+        </div>
+        <small class="note">* 1-3 tagacha rasm tanlang yoki URL orqali qo'shing</small>
+    </div>
 
-    <!-- Tavsif -->
-    <textarea id="desc" placeholder="Tavsif yozing..."></textarea>
+    <div class="field-group">
+        <label><i class="fas fa-pen-alt"></i> Tovar haqida</label>
+        <textarea id="description" placeholder="Mahsulot haqida batafsil tavsif..."></textarea>
+    </div>
 
-    <!-- Narx -->
-    <input type="text" id="price" placeholder="Narxi">
+    <div class="field-group">
+        <label><i class="fas fa-tag"></i> Narxi</label>
+        <input type="text" id="price" placeholder="Masalan: 150 000 so'm yoki 15$">
+    </div>
 
     <hr>
 
-    <p>Aloqa: +998(95)970-84-06</p>
-    <p>Telegram: @Gulnura1407</p>
+    <div class="contact-info">
+        <div class="contact-line"><i class="fas fa-phone-alt"></i> Aloqa: 95-9708406</div>
+        <div class="contact-line"><i class="fab fa-telegram"></i> Telegram: @Gulnura_06_14</div>
+    </div>
 
-    <p>
-        <a href="https://yandex.uz/maps/?ll=69.408482%2C41.132932&mode=routes&rtext=~41.133076%2C69.408213&rtt=auto&ruri=~&z=19.34" target="_blank">
-            Optom lokatsiya: bosing > LOKATSIYA📍
-        </a>
-    </p>
+    <button class="btn send-btn" id="sendToTelegramBtn"><i class="fab fa-telegram"></i> Telegram guruhga yuborish</button>
 
-    <button onclick="sendToTelegram()">YUBORISH</button>
+    <div id="statusMsg" class="status-msg">✅ Tayyor. Xabar yuborilgandan so‘ng "Do‘stlarga ulashish" tugmasi xabar linkini yuboradi.</div>
+    
+    <div class="preview-card">
+        <h4>📋 Xabar ko‘rinishi:</h4>
+        <div class="sample-message">
+-----MAHSULOT-----
 
+🔥 Nomi: [Siz kiritgan nom]
+📝 Tovar haqida: [Siz kiritgan tavsif]
+💰 Narxi: [Siz kiritgan narx]
+----------------------------
+📞 Aloqa: 95-9708406
+✈️ Telegram: @Gulnura_06_14
+📍 <a href="https://share.google/RmFGYTN0HaY1pKlZf" target="_blank">Magazin lokatsiyasi</a>
+---------------------------
+        </div>
+    </div>
 </div>
+<footer>Admin panel | Guruh: @ArzonTovarlarMix | Xabar linki: https://t.me/ArzonTovarlarMix/ID</footer>
 
 <script>
-const TOKEN = "8740338415:AAEsmyA7Eo9Sg2vgtSsr7qCZjG-rToltvxw";
-const CHAT_ID = "3927349056";
+    const BOT_TOKEN = "8740338415:AAEsmyA7Eo9Sg2vgtSsr7qCZjG-rToltvxw";
+    const GROUP_CHAT_ID = "-1003927349056";
+    const GROUP_USERNAME = "ArzonTovarlarMix";
+    const LOCATION_URL = "https://share.google/RmFGYTN0HaY1pKlZf";
+    
+    let imagesArray = [];
+    const MAX_IMAGES = 3;
 
-async function sendToTelegram() {
+    const previewContainer = document.getElementById('previewContainer');
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const fetchImageBtn = document.getElementById('fetchImageBtn');
+    const sendBtn = document.getElementById('sendToTelegramBtn');
+    const statusDiv = document.getElementById('statusMsg');
+    const productNameInput = document.getElementById('productName');
+    const descriptionInput = document.getElementById('description');
+    const priceInput = document.getElementById('price');
 
-    let desc = document.getElementById("desc").value;
-    let price = document.getElementById("price").value;
-    let files = document.getElementById("image").files;
+    function showMessage(msg, isError = false) {
+        statusDiv.innerHTML = isError ? `❌ ${msg}` : `✅ ${msg}`;
+        statusDiv.style.background = isError ? '#fee2e2' : '#dcfce7';
+        statusDiv.style.color = isError ? '#b91c1c' : '#166534';
+        setTimeout(() => {
+            if(statusDiv.innerHTML === `❌ ${msg}` || statusDiv.innerHTML === `✅ ${msg}`) {
+                statusDiv.style.background = '#eef2ff';
+                statusDiv.style.color = '#075985';
+                statusDiv.innerHTML = '📡 Telegramga jo‘natishga tayyor.';
+            }
+        }, 5000);
+    }
 
-    let text = `
-📦 Yangi tovar
-
-📝 Tavsif: ${desc}
-💰 Narx: ${price}
-
-————————————
-📞 Aloqa: +998(95)970-84-06
-📲 Telegram: @Gulnura1407
-
-📍 Lokatsiya:
-https://yandex.uz/maps/?ll=69.408482%2C41.132932&mode=routes&rtext=~41.133076%2C69.408213&rtt=auto&ruri=~&z=19.34
-`;
-
-    // Matn yuborish
-    await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            chat_id: CHAT_ID,
-            text: text
-        })
-    });
-
-    // Rasm yuborish
-    for (let file of files) {
-
-        let formData = new FormData();
-        formData.append("chat_id", CHAT_ID);
-        formData.append("photo", file);
-
-        await fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, {
-            method: "POST",
-            body: formData
+    function renderPreviews() {
+        previewContainer.innerHTML = '';
+        if(imagesArray.length === 0) {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'img-preview';
+            placeholder.style.background = '#e2e8f0';
+            placeholder.style.fontSize = '12px';
+            placeholder.style.fontFamily = 'Arial';
+            placeholder.style.fontWeight = 'bold';
+            placeholder.innerText = 'Rasm yo‘q';
+            previewContainer.appendChild(placeholder);
+            return;
+        }
+        
+        imagesArray.forEach((img, idx) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'img-preview';
+            const imgEl = document.createElement('img');
+            imgEl.src = img.data;
+            const removeSpan = document.createElement('div');
+            removeSpan.className = 'remove-img';
+            removeSpan.innerHTML = '✕';
+            removeSpan.addEventListener('click', (e) => {
+                e.stopPropagation();
+                imagesArray.splice(idx, 1);
+                renderPreviews();
+                showMessage(`${idx+1}-rasm olib tashlandi`);
+            });
+            wrapper.appendChild(imgEl);
+            wrapper.appendChild(removeSpan);
+            previewContainer.appendChild(wrapper);
         });
     }
 
-    alert("Yuborildi!");
-}
-</script>
+    function readFileAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
 
+    async function addFiles(files) {
+        if(!files || files.length === 0) return;
+        let available = MAX_IMAGES - imagesArray.length;
+        if(available <= 0) {
+            showMessage(`Siz 3 tadan ortiq rasm yuklay olmaysiz.`, true);
+            return;
+        }
+        let addedCount = 0;
+        for(let i = 0; i < Math.min(files.length, available); i++) {
+            const file = files[i];
+            if(!file.type.startsWith('image/')) continue;
+            try {
+                const base64 = await readFileAsDataURL(file);
+                imagesArray.push({ type: 'base64', data: base64 });
+                addedCount++;
+            } catch(e) { console.warn(e); }
+        }
+        if(addedCount > 0) {
+            renderPreviews();
+            showMessage(`${addedCount} ta rasm qo'shildi. (Jami: ${imagesArray.length}/3)`);
+        } else {
+            showMessage(`Fayllarni qo'shishda xatolik`, true);
+        }
+    }
+
+    async function addImageFromUrl(url) {
+        if(!url) return false;
+        if(imagesArray.length >= MAX_IMAGES) {
+            showMessage(`Rasm limiti to'ldi (3 ta)`, true);
+            return false;
+        }
+        try {
+            const response = await fetch(url, { mode: 'cors' });
+            if(!response.ok) throw new Error('Rasmni yuklab bo‘lmadi');
+            const blob = await response.blob();
+            if(!blob.type.startsWith('image/')) throw new Error('URL rasmga ishora qilmayapti');
+            const reader = new FileReader();
+            const base64 = await new Promise((resolve) => {
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(blob);
+            });
+            imagesArray.push({ type: 'base64', data: base64 });
+            renderPreviews();
+            showMessage(`URL orqali rasm qo'shildi (jami ${imagesArray.length}/3)`);
+            return true;
+        } catch(err) {
+            console.error(err);
+            showMessage(`URL dan rasm olishda xatolik`, true);
+            return false;
+        }
+    }
+
+    // Xabar matni - siz talab qilgan format
+    function buildMessageText(productName, description, price) {
+        const safeName = (productName || '').trim();
+        const safeDesc = (description || '').trim();
+        const safePrice = (price || '').trim();
+        
+        return `
+-----MAHSULOT-----
+
+🔥 Nomi: ${safeName || '❌ Nom kiritilmagan'}
+📝 Tovar haqida: ${safeDesc}
+💰 Narxi: ${safePrice}
+----------------------------
+📞 Aloqa: 95-9708406
+✈️ Telegram: @Gulnura_06_14
+📍 <a href="${LOCATION_URL}">Magazin lokatsiyasi</a>
+---------------------------
+        `.trim();
+    }
+
+    function dataURLtoBlob(dataurl) {
+        const arr = dataurl.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while(n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], {type: mime});
+    }
+
+    // Xabar ID sini olish va link yaratish
+    async function sendToTelegram() {
+        const productName = productNameInput.value.trim();
+        const description = descriptionInput.value.trim();
+        const price = priceInput.value.trim();
+        
+        if(imagesArray.length === 0) {
+            showMessage("Hech bo'lmaganda 1 ta rasm yuklang!", true);
+            return;
+        }
+        if(!productName) {
+            showMessage("Iltimos, mahsulot NOMI ni kiriting!", true);
+            return;
+        }
+        if(description === "") {
+            showMessage("Iltimos, mahsulot tavsifini yozing!", true);
+            return;
+        }
+        if(price === "") {
+            showMessage("Narxni kiriting!", true);
+            return;
+        }
+
+        const captionText = buildMessageText(productName, description, price);
+        
+        try {
+            let messageId = null;
+            
+            if(imagesArray.length === 1) {
+                const blob = dataURLtoBlob(imagesArray[0].data);
+                const formData = new FormData();
+                formData.append('chat_id', GROUP_CHAT_ID);
+                formData.append('photo', blob, 'product.jpg');
+                formData.append('caption', captionText);
+                formData.append('parse_mode', 'HTML');
+                
+                const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if(result.ok) {
+                    messageId = result.result.message_id;
+                } else {
+                    throw new Error(result.description);
+                }
+            } 
+            else {
+                // Ko'p rasm: birinchi rasmni caption bilan yuboramiz
+                const firstBlob = dataURLtoBlob(imagesArray[0].data);
+                const formDataFirst = new FormData();
+                formDataFirst.append('chat_id', GROUP_CHAT_ID);
+                formDataFirst.append('photo', firstBlob, 'product_main.jpg');
+                formDataFirst.append('caption', captionText);
+                formDataFirst.append('parse_mode', 'HTML');
+                
+                const firstResponse = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                    method: 'POST',
+                    body: formDataFirst
+                });
+                const firstResult = await firstResponse.json();
+                if(firstResult.ok) {
+                    messageId = firstResult.result.message_id;
+                } else {
+                    throw new Error(firstResult.description);
+                }
+                
+                // Qolgan rasmlarni alohida yuboramiz
+                for(let i = 1; i < imagesArray.length; i++) {
+                    const blob = dataURLtoBlob(imagesArray[i].data);
+                    const fd = new FormData();
+                    fd.append('chat_id', GROUP_CHAT_ID);
+                    fd.append('photo', blob, `product_${i}.jpg`);
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                        method: 'POST',
+                        body: fd
+                    });
+                }
+            }
+            
+            if(messageId) {
+                // Xabar linki: https://t.me/ArzonTovarlarMix/144
+                const messageLink = `https://t.me/${GROUP_USERNAME}/${messageId}`;
+                
+                // Xabar yuborilgandan so'ng "Do'stlarga ulashish" tugmasi uchun link jo'natamiz
+                const shareText = `📦 MAHSULOT MA’LUMOTLARI 📦\n\n${messageLink}`;
+                const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(messageLink)}&text=${encodeURIComponent("📦 Mahsulot: " + productName)}`;
+                
+                // Inline keyboard bilan xabar linkini ulashish tugmasi
+                const inlineKeyboard = {
+                    inline_keyboard: [
+                        [{ text: "👥 Do'stlarga ulashish ↗️", url: shareUrl }]
+                    ]
+                };
+                
+                // Xabar linkini guruhga jo'natamiz (edit orqali yoki yangi xabar)
+                // Asl xabarni edit qilish uchun editMessageReplyMarkup
+                if(imagesArray.length === 1) {
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/editMessageReplyMarkup`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: GROUP_CHAT_ID,
+                            message_id: messageId,
+                            reply_markup: inlineKeyboard
+                        })
+                    });
+                } else {
+                    // Birinchi rasmga keyboard qo'shamiz
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/editMessageReplyMarkup`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: GROUP_CHAT_ID,
+                            message_id: messageId,
+                            reply_markup: inlineKeyboard
+                        })
+                    });
+                }
+                
+                showMessage(`✅ Mahsulot yuborildi! Xabar linki: ${messageLink}. Do'stlarga ulashish tugmasi orqali ulashing.`);
+            } else {
+                showMessage("✅ Mahsulot guruhga yuborildi!", false);
+            }
+        } catch(err) {
+            console.error(err);
+            showMessage(`Yuborishda xatolik: ${err.message}`, true);
+        }
+    }
+
+    uploadBtn.addEventListener('click', () => {
+        fileInput.click();
+    });
+    
+    fileInput.addEventListener('change', (e) => {
+        if(e.target.files && e.target.files.length) {
+            addFiles(Array.from(e.target.files));
+        }
+        fileInput.value = '';
+    });
+    
+    fetchImageBtn.addEventListener('click', () => {
+        let imageUrl = prompt("Rasm URL manzilini kiriting:", "https://picsum.photos/300/200?random=1");
+        if(imageUrl && imageUrl.trim() !== "") {
+            addImageFromUrl(imageUrl.trim());
+        } else {
+            showMessage("URL kiritilmadi", false);
+        }
+    });
+    
+    sendBtn.addEventListener('click', sendToTelegram);
+    
+    renderPreviews();
+</script>
 </body>
 </html>
