@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Tovar joylash</title>
+
+    <style>
+        body {
+            font-family: Arial Black;
+            font-weight: bold;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        input, textarea {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: green;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        hr {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+
+    <h2>TOVAR QO‘SHISH</h2>
+
+    <!-- Rasm -->
+    <input type="file" id="image" accept="image/*" multiple>
+
+    <!-- Tavsif -->
+    <textarea id="desc" placeholder="Tavsif yozing..."></textarea>
+
+    <!-- Narx -->
+    <input type="text" id="price" placeholder="Narxi">
+
+    <hr>
+
+    <p>Aloqa: +998(95)970-84-06</p>
+    <p>Telegram: @Gulnura1407</p>
+
+    <p>
+        <a href="https://yandex.uz/maps/?ll=69.408482%2C41.132932&mode=routes&rtext=~41.133076%2C69.408213&rtt=auto&ruri=~&z=19.34" target="_blank">
+            Optom lokatsiya: bosing > LOKATSIYA📍
+        </a>
+    </p>
+
+    <button onclick="sendToTelegram()">YUBORISH</button>
+
+</div>
+
+<script>
+const TOKEN = "8740338415:AAEsmyA7Eo9Sg2vgtSsr7qCZjG-rToltvxw";
+const CHAT_ID = "3927349056";
+
+async function sendToTelegram() {
+
+    let desc = document.getElementById("desc").value;
+    let price = document.getElementById("price").value;
+    let files = document.getElementById("image").files;
+
+    let text = `
+📦 Yangi tovar
+
+📝 Tavsif: ${desc}
+💰 Narx: ${price}
+
+————————————
+📞 Aloqa: +998(95)970-84-06
+📲 Telegram: @Gulnura1407
+
+📍 Lokatsiya:
+https://yandex.uz/maps/?ll=69.408482%2C41.132932&mode=routes&rtext=~41.133076%2C69.408213&rtt=auto&ruri=~&z=19.34
+`;
+
+    // Matn yuborish
+    await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: text
+        })
+    });
+
+    // Rasm yuborish
+    for (let file of files) {
+
+        let formData = new FormData();
+        formData.append("chat_id", CHAT_ID);
+        formData.append("photo", file);
+
+        await fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, {
+            method: "POST",
+            body: formData
+        });
+    }
+
+    alert("Yuborildi!");
+}
+</script>
+
+</body>
+</html>
